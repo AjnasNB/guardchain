@@ -198,44 +198,34 @@ export default function ClaimVotingPage() {
 
       if (response.ok) {
         const result = await response.json();
-        console.log('Vote transaction data received:', result);
+        console.log('Vote response received:', result);
         
-        // Step 2: Execute transaction in MetaMask
-        if (result.transaction) {
-          try {
-            const txResult = await executeMetaMaskTransaction(result.transaction);
-            console.log('MetaMask transaction successful:', txResult);
-            
-            alert(`Vote submitted successfully! Transaction hash: ${txResult.hash}`);
-            
-            // Reload claim to see updated voting results
-            await loadClaim();
-          } catch (txError) {
-            console.error('MetaMask transaction failed:', txError);
-            alert(`MetaMask transaction failed: ${(txError as any).message || txError}`);
+        if (result.success) {
+          // Vote was recorded successfully in backend
+          alert(`Vote recorded successfully! ${result.message}`);
+          
+          // Reload claim to see updated voting results
+          await loadClaim();
+          
+          // Optionally execute MetaMask transaction for blockchain recording
+          if (result.transaction) {
+            try {
+              const txResult = await executeMetaMaskTransaction(result.transaction);
+              console.log('MetaMask transaction successful:', txResult);
+              alert(`Vote also recorded on blockchain! Transaction hash: ${txResult.hash}`);
+            } catch (txError) {
+              console.error('MetaMask transaction failed:', txError);
+              // Don't show error to user since vote was already recorded in backend
+              console.log('Vote recorded in backend but blockchain transaction failed');
+            }
           }
         } else {
-          // Fallback: Create transaction data manually
-          const manualTransaction = {
-            to: '0x528Bf18723c2021420070e0bB2912F881a93ca53', // Claims Engine
-            data: '0x', // Placeholder - would be actual vote data
-            value: '0x0',
-            estimatedGas: '150000', // Reasonable gas for Arbitrum
-          };
-          
-          try {
-            const txResult = await executeMetaMaskTransaction(manualTransaction);
-            console.log('Manual MetaMask transaction successful:', txResult);
-            
-            alert(`Vote submitted successfully! Transaction hash: ${txResult.hash}`);
-            await loadClaim();
-          } catch (txError) {
-            console.error('Manual MetaMask transaction failed:', txError);
-            alert(`MetaMask transaction failed: ${(txError as any).message || txError}`);
-          }
+          // Vote failed (e.g., duplicate vote)
+          alert(`Vote failed: ${result.message}`);
         }
       } else {
         const error = await response.json();
+        console.error('Vote submission failed:', error);
         alert(`Vote submission failed: ${error.message}`);
       }
     } catch (error) {

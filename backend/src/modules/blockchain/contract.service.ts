@@ -9,6 +9,8 @@ import * as path from 'path';
 export class ContractService {
   private readonly logger = new Logger(ContractService.name);
   private contracts: { [key: string]: ethers.Contract } = {};
+  private votes: Map<string, any> = new Map();
+  private claimVotingStatus: Map<string, any> = new Map();
 
   constructor(private readonly blockchainService: BlockchainService) {
     this.initializeContracts();
@@ -655,11 +657,13 @@ export class ContractService {
           return this.getFallbackClaimDetails(claimId);
         }
         
+        const votingStatus = await this.getClaimVotingStatus(claimId);
+        
         return {
           claimId,
-              exists: true,
+          exists: true,
           contractAddress: AppConfig.contracts.claimsEngine,
-              details: {
+          details: {
             policyId: claimData.policyId ? claimData.policyId.toString() : '0',
             claimant: claimData.claimant || '0x0000000000000000000000000000000000000000',
             claimType: this.getClaimType(claimData.claimType || 0),
@@ -672,7 +676,8 @@ export class ContractService {
             evidenceHashes: claimData.evidenceHashes || [],
             ipfsHash: claimData.ipfsHash || '',
             votingDeadline: claimData.votingDeadline ? new Date(Number(claimData.votingDeadline) * 1000).toISOString() : null,
-          }
+          },
+          votingDetails: votingStatus
         };
       } catch (blockchainError) {
         this.logger.warn(`Failed to fetch claim from blockchain: ${blockchainError.message}, returning fallback claim data`);
@@ -685,8 +690,11 @@ export class ContractService {
     }
   }
 
-  private getFallbackClaimDetails(claimId: string) {
+  private async getFallbackClaimDetails(claimId: string) {
     this.logger.log(`Returning fallback claim details for ${claimId}`);
+    
+    // Get actual voting status if available
+    const votingStatus = await this.getClaimVotingStatus(claimId);
     
     // Generate different realistic claim data based on claimId
     const claimVariations = [
@@ -714,11 +722,11 @@ export class ContractService {
     ];
     
     const variation = claimVariations[parseInt(claimId) % claimVariations.length] || claimVariations[0];
-      
-      return {
-        claimId,
+    
+    return {
+      claimId,
       exists: true,
-        contractAddress: AppConfig.contracts.claimsEngine,
+      contractAddress: AppConfig.contracts.claimsEngine,
       details: {
         policyId: variation.policyId,
         claimant: '0x8BebaDf625b932811Bf71fBa961ed067b5770EfA', // Use a real address
@@ -733,12 +741,7 @@ export class ContractService {
         ipfsHash: '',
         votingDeadline: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(), // 3 days from now
       },
-      votingDetails: {
-        votesFor: '1200',
-        votesAgainst: '800',
-        totalVotes: '2000',
-        votingEnds: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString()
-      }
+      votingDetails: votingStatus
     };
   }
 
@@ -951,30 +954,127 @@ export class ContractService {
 
   async voteOnClaim(voteData: any) {
     try {
+      this.logger.log(`Processing vote for claim ${voteData.claimId}: ${voteData.approved ? 'APPROVE' : 'REJECT'}`);
+      
+      // Store vote in memory (in a real app, this would be in a database)
+      if (!this.votes) {
+        this.votes = new Map();
+      }
+      
+      const voteKey = `${voteData.claimId}_${voteData.voter}`;
+      const existingVote = this.votes.get(voteKey);
+      
+      if (existingVote) {
+        this.logger.warn(`User ${voteData.voter} has already voted on claim ${voteData.claimId}`);
+        return {
+          success: false,
+          message: 'You have already voted on this claim',
+          error: 'Duplicate vote'
+        };
+      }
+      
+      // Store the vote
+      const vote = {
+        claimId: voteData.claimId,
+        voter: voteData.voter,
+        approved: voteData.approved,
+        suggestedAmount: voteData.suggestedAmount || 0,
+        justification: voteData.justification || '',
+        timestamp: new Date().toISOString()
+      };
+      
+      this.votes.set(voteKey, vote);
+      this.logger.log(`Vote stored for claim ${voteData.claimId} by ${voteData.voter}`);
+      
+      // Update claim voting status
+      await this.updateClaimVotingStatus(voteData.claimId);
+      
       const voteTransaction = {
         to: AppConfig.contracts.claimsEngine,
-          data: this.contracts.claimsEngine.interface.encodeFunctionData('castVote', [
+        data: this.contracts.claimsEngine.interface.encodeFunctionData('castVote', [
           voteData.claimId,
-            voteData.approved,
+          voteData.approved,
           voteData.suggestedAmount || 0,
           voteData.justification || ''
-          ]),
+        ]),
         estimatedGas: '200000',
         value: '0'
       };
       
       return {
         success: true,
-        message: 'Vote transaction prepared',
+        message: 'Vote recorded successfully',
         transaction: voteTransaction,
-        contractAddress: AppConfig.contracts.claimsEngine
+        contractAddress: AppConfig.contracts.claimsEngine,
+        vote: vote
       };
     } catch (error) {
-      this.logger.error(`Failed to prepare claim vote: ${error.message}`);
+      this.logger.error(`Failed to process claim vote: ${error.message}`);
       return {
         success: false,
-        message: 'Failed to prepare claim vote',
+        message: 'Failed to process claim vote',
         error: error.message
+      };
+    }
+  }
+
+  private async updateClaimVotingStatus(claimId: string) {
+    try {
+      // Get all votes for this claim
+      const claimVotes = Array.from(this.votes.values()).filter(vote => vote.claimId === claimId);
+      
+      const votesFor = claimVotes.filter(vote => vote.approved).length;
+      const votesAgainst = claimVotes.filter(vote => !vote.approved).length;
+      const totalVotes = claimVotes.length;
+      
+      this.logger.log(`Claim ${claimId} voting status: ${votesFor} for, ${votesAgainst} against, ${totalVotes} total`);
+      
+      // Store voting status (in a real app, this would be in a database)
+      if (!this.claimVotingStatus) {
+        this.claimVotingStatus = new Map();
+      }
+      
+      this.claimVotingStatus.set(claimId, {
+        votesFor,
+        votesAgainst,
+        totalVotes,
+        votingEnds: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString() // 3 days from now
+      });
+      
+    } catch (error) {
+      this.logger.error(`Failed to update voting status for claim ${claimId}: ${error.message}`);
+    }
+  }
+
+  async getClaimVotingStatus(claimId: string) {
+    try {
+      if (!this.claimVotingStatus) {
+        return {
+          votesFor: '0',
+          votesAgainst: '0',
+          totalVotes: '0',
+          votingEnds: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString()
+        };
+      }
+      
+      const status = this.claimVotingStatus.get(claimId);
+      if (status) {
+        return status;
+      }
+      
+      return {
+        votesFor: '0',
+        votesAgainst: '0',
+        totalVotes: '0',
+        votingEnds: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString()
+      };
+    } catch (error) {
+      this.logger.error(`Failed to get voting status for claim ${claimId}: ${error.message}`);
+      return {
+        votesFor: '0',
+        votesAgainst: '0',
+        totalVotes: '0',
+        votingEnds: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString()
       };
     }
   }

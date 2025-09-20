@@ -29,6 +29,10 @@ export default function ClaimsPage() {
   const [claims, setClaims] = useState<Claim[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
+  const [voteLoading, setVoteLoading] = useState<string | null>(null);
+  const [voteReason, setVoteReason] = useState('');
+  const [showVoteModal, setShowVoteModal] = useState(false);
+  const [selectedClaim, setSelectedClaim] = useState<Claim | null>(null);
 
   useEffect(() => {
     if (isConnected && account) {
@@ -42,7 +46,7 @@ export default function ClaimsPage() {
       console.log('Loading all claims...');
       
       // Try the new comprehensive endpoint first
-      let response = await fetch('/api/v1/blockchain/claims/all');
+      let response = await fetch('http://localhost:3000/api/v1/blockchain/claims/all');
       if (response.ok) {
         const data = await response.json();
         console.log(`Loaded ${data.total} claims from ${data.source}`);
@@ -358,6 +362,77 @@ export default function ClaimsPage() {
     }
   };
 
+  const openVoteModal = (claim: Claim) => {
+    setSelectedClaim(claim);
+    setVoteReason('');
+    setShowVoteModal(true);
+  };
+
+  const closeVoteModal = () => {
+    setShowVoteModal(false);
+    setSelectedClaim(null);
+    setVoteReason('');
+  };
+
+  const voteOnClaim = async (claimId: string, approved: boolean) => {
+    if (!isConnected || !account) {
+      alert('Please connect your wallet to vote');
+      return;
+    }
+
+    if (!voteReason.trim()) {
+      alert('Please provide a reason for your vote');
+      return;
+    }
+
+    try {
+      setVoteLoading(claimId);
+      
+      // Send vote to backend
+      const votePayload = {
+        claimId: claimId,
+        voter: account,
+        approved: approved,
+        suggestedAmount: 0,
+        justification: voteReason
+      };
+
+      const response = await fetch('http://localhost:3000/api/v1/claims/vote', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(votePayload),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Vote response received:', result);
+        
+        if (result.success) {
+          alert(`Vote recorded successfully! ${result.message}`);
+          closeVoteModal();
+          
+          // Reload claims to show updated vote counts
+          await loadClaims();
+        } else {
+          alert(`Vote failed: ${result.message}`);
+        }
+      } else {
+        const error = await response.json();
+        console.error('Vote submission failed:', error);
+        alert(`Vote submission failed: ${error.message}`);
+      }
+      
+    } catch (error) {
+      console.error('Vote submission failed:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      alert('Failed to submit vote: ' + errorMessage);
+    } finally {
+      setVoteLoading(null);
+    }
+  };
+
   const filteredClaims = claims.filter(claim => {
     if (filter === 'all') return true;
     return claim.status === filter;
@@ -574,12 +649,13 @@ export default function ClaimsPage() {
                     View Details
                   </Link>
                   {claim.status === 'pending' && (
-                    <Link 
-                      href={`/governance/voting/${claim.id}`}
-                      className="btn-primary flex-1 text-center"
+                    <button 
+                      onClick={() => openVoteModal(claim)}
+                      disabled={voteLoading === claim.id}
+                      className="btn-primary flex-1 text-center disabled:opacity-50"
                     >
-                      Vote Now
-                    </Link>
+                      {voteLoading === claim.id ? 'Voting...' : 'Vote Now'}
+                    </button>
                   )}
                 </div>
 
@@ -595,6 +671,63 @@ export default function ClaimsPage() {
           </div>
         )}
       </div>
+
+      {/* Voting Modal */}
+      {showVoteModal && selectedClaim && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-900 rounded-2xl p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold text-white">Vote on Claim</h3>
+              <button 
+                onClick={closeVoteModal}
+                className="text-white/60 hover:text-white text-2xl"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="mb-6">
+              <h4 className="text-lg font-semibold text-white mb-2">
+                {selectedClaim.type.charAt(0).toUpperCase() + selectedClaim.type.slice(1)} Claim
+              </h4>
+              <p className="text-white/80 text-sm mb-2">
+                Policy #{selectedClaim.policyId} | ${selectedClaim.requestedAmount}
+              </p>
+              <p className="text-white/60 text-sm">{selectedClaim.description}</p>
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-white font-semibold mb-2">
+                Your Vote Reason
+              </label>
+              <textarea
+                value={voteReason}
+                onChange={(e) => setVoteReason(e.target.value)}
+                placeholder="Explain your voting decision..."
+                className="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-blue-400 resize-none"
+                rows={3}
+              />
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => voteOnClaim(selectedClaim.id, true)}
+                disabled={voteLoading === selectedClaim.id}
+                className="flex-1 bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white font-semibold py-3 px-4 rounded-xl transition-colors"
+              >
+                {voteLoading === selectedClaim.id ? 'Voting...' : 'Approve'}
+              </button>
+              <button
+                onClick={() => voteOnClaim(selectedClaim.id, false)}
+                disabled={voteLoading === selectedClaim.id}
+                className="flex-1 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-semibold py-3 px-4 rounded-xl transition-colors"
+              >
+                {voteLoading === selectedClaim.id ? 'Voting...' : 'Reject'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 } 

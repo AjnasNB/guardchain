@@ -127,7 +127,7 @@ export default function GovernancePage() {
     setVoteChoice('approve');
   };
 
-  // Function to vote on claim with MetaMask
+  // Function to vote on claim with backend
   const voteOnClaim = async (claimId: string) => {
     if (!isConnected || !account) {
       alert('Please connect your wallet to vote');
@@ -142,35 +142,41 @@ export default function GovernancePage() {
     try {
       setVoteLoading(true);
       
-      // Create vote transaction data
-      const voteData = {
-        to: '0x528Bf18723c2021420070e0bB2912F881a93ca53', // Claims Engine
-        data: '0x', // Mimic voting data
-        value: '0x0',
-        estimatedGas: '150000', // Reasonable gas for Arbitrum
+      // Send vote to backend
+      const votePayload = {
+        claimId: claimId,
+        voter: account,
+        approved: true, // Default to approve for now
+        suggestedAmount: 0,
+        justification: voteReason
       };
 
-      if (!(window as any).ethereum) {
-        alert('MetaMask is not installed');
-        return;
-      }
-
-      const tx = await (window as any).ethereum.request({
-        method: 'eth_sendTransaction',
-        params: [{
-          from: account,
-          to: voteData.to,
-          data: voteData.data,
-          value: voteData.value,
-          gas: voteData.estimatedGas,
-        }],
+      const response = await fetch('http://localhost:3000/api/v1/claims/vote', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(votePayload),
       });
 
-      alert(`Vote submitted successfully! Transaction hash: ${tx}`);
-      closeClaimModal();
-      
-      // Reload governance data
-      await loadAllData();
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Vote response received:', result);
+        
+        if (result.success) {
+          alert(`Vote recorded successfully! ${result.message}`);
+          closeClaimModal();
+          
+          // Reload governance data to show updated vote counts
+          await loadAllData();
+        } else {
+          alert(`Vote failed: ${result.message}`);
+        }
+      } else {
+        const error = await response.json();
+        console.error('Vote submission failed:', error);
+        alert(`Vote submission failed: ${error.message}`);
+      }
       
     } catch (error) {
       console.error('Vote submission failed:', error);
