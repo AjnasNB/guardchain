@@ -1,0 +1,421 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_claimsEngine",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_stablecoin",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_vrfCoordinator",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_admin",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "policyId",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "beneficiary",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "transactionHash",
+        "type": "bytes32"
+      }
+    ],
+    "name": "ParametricPayout",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "policyId",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "conditionId",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "payoutAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
+      }
+    ],
+    "name": "TriggerActivated",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "policyId",
+        "type": "bytes32"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "oracle",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "dataFeedId",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "threshold",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint8",
+            "name": "comparisonType",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint256",
+            "name": "payoutAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "active",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct IParametricTriggers.TriggerCondition",
+        "name": "condition",
+        "type": "tuple"
+      }
+    ],
+    "name": "addTriggerCondition",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "admin",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "policyId",
+        "type": "bytes32"
+      }
+    ],
+    "name": "checkTriggers",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "triggered",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "claimsEngine",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "policyId",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "beneficiary",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "executeParametricPayout",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "policyId",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getAvailablePayout",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "available",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "policyId",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getPolicyTriggers",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "bytes32",
+            "name": "policyId",
+            "type": "bytes32"
+          },
+          {
+            "components": [
+              {
+                "internalType": "address",
+                "name": "oracle",
+                "type": "address"
+              },
+              {
+                "internalType": "bytes32",
+                "name": "dataFeedId",
+                "type": "bytes32"
+              },
+              {
+                "internalType": "uint256",
+                "name": "threshold",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint8",
+                "name": "comparisonType",
+                "type": "uint8"
+              },
+              {
+                "internalType": "uint256",
+                "name": "payoutAmount",
+                "type": "uint256"
+              },
+              {
+                "internalType": "bool",
+                "name": "active",
+                "type": "bool"
+              }
+            ],
+            "internalType": "struct IParametricTriggers.TriggerCondition[]",
+            "name": "conditions",
+            "type": "tuple[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "totalPayoutCap",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "usedPayout",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "active",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct IParametricTriggers.PolicyTriggers",
+        "name": "triggers",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "policyId",
+        "type": "bytes32"
+      }
+    ],
+    "name": "hasActiveTriggers",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "hasActive",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "name": "policyExists",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "name": "policyTriggers",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "policyId",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalPayoutCap",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "usedPayout",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bool",
+        "name": "active",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "policyId",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "conditionIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "removeTriggerCondition",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "stablecoin",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "vrfCoordinator",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

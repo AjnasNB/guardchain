@@ -1,0 +1,104 @@
+{
+  "network": {
+    "chainId": "421614"
+  },
+  "deployer": "0x8BebaDf625b932811Bf71fBa961ed067b5770EfA",
+  "timestamp": "2025-09-19T15:37:46.348Z",
+  "contracts": {
+    "stablecoin": {
+      "address": "0x7438af9FC68fE976e33029E570720d19A975baC7",
+      "name": "ChainSureStablecoin",
+      "symbol": "csINR",
+      "args": [
+        "0x0000000000000000000000000000000000000000",
+        "12000000000000000"
+      ]
+    },
+    "governanceToken": {
+      "address": "0x9B3A8167eb01246688705FC1C11F81Efa7350fc5",
+      "name": "ChainSureGovernanceToken",
+      "symbol": "CSURE",
+      "args": [
+        "1000000000000000000000000"
+      ]
+    },
+    "policyNFT": {
+      "address": "0x7596B7c1Ad9490275eC143a6bc1bbd495e338A8C",
+      "name": "ChainSurePolicyNFT",
+      "symbol": "CSPOLICY",
+      "args": [
+        "0x7438af9FC68fE976e33029E570720d19A975baC7",
+        "0x8BebaDf625b932811Bf71fBa961ed067b5770EfA"
+      ]
+    },
+    "claimsEngine": {
+      "address": "0x54A4c8006272fDeA157950421ceBeb510387af83",
+      "name": "ChainSureClaimsEngine",
+      "args": [
+        "0x7596B7c1Ad9490275eC143a6bc1bbd495e338A8C",
+        "0x9B3A8167eb01246688705FC1C11F81Efa7350fc5",
+        "0x7438af9FC68fE976e33029E570720d19A975baC7",
+        "0x0000000000000000000000000000000000000000"
+      ]
+    },
+    "surplusDistributor": {
+      "address": "0x41A34F8150226c57E613A07B9750EB5dA0076317",
+      "name": "ChainSureSurplusDistributor",
+      "args": [
+        "0x7438af9FC68fE976e33029E570720d19A975baC7",
+        "0x9B3A8167eb01246688705FC1C11F81Efa7350fc5",
+        "0x7596B7c1Ad9490275eC143a6bc1bbd495e338A8C",
+        "0x0000000000000000000000000000000000000000"
+      ]
+    },
+    "governance": {
+      "address": "0xe3ca0A9B4D66b8dCf7B44c914Bd2c97b2a379D78",
+      "name": "ChainSureGovernance",
+      "args": [
+        "0x9B3A8167eb01246688705FC1C11F81Efa7350fc5",
+        "0x7596B7c1Ad9490275eC143a6bc1bbd495e338A8C",
+        "0x54A4c8006272fDeA157950421ceBeb510387af83",
+        "0x41A34F8150226c57E613A07B9750EB5dA0076317",
+        "0x8BebaDf625b932811Bf71fBa961ed067b5770EfA"
+      ]
+    },
+    "juryOracle": {
+      "address": "0xA5ed6d4057D73B4D3F6fb0A6ec71334FD932eFE1",
+      "name": "JuryOracleImpl",
+      "args": [
+        "0x9B3A8167eb01246688705FC1C11F81Efa7350fc5",
+        "0x54A4c8006272fDeA157950421ceBeb510387af83",
+        "0x8BebaDf625b932811Bf71fBa961ed067b5770EfA"
+      ]
+    },
+    "voteTally": {
+      "address": "0xAAe39523b50aC68AF0710Fa84ff28934F09e61C5",
+      "name": "VoteTallyImpl",
+      "args": [
+        "0x9B3A8167eb01246688705FC1C11F81Efa7350fc5",
+        "0xe3ca0A9B4D66b8dCf7B44c914Bd2c97b2a379D78",
+        "0x8BebaDf625b932811Bf71fBa961ed067b5770EfA"
+      ]
+    },
+    "appealSystem": {
+      "address": "0x2Ad335BB9Ee03d71c1b6183ddd0BB92642118503",
+      "name": "AppealSystemImpl",
+      "args": [
+        "0x54A4c8006272fDeA157950421ceBeb510387af83",
+        "0xA5ed6d4057D73B4D3F6fb0A6ec71334FD932eFE1",
+        "0xe3ca0A9B4D66b8dCf7B44c914Bd2c97b2a379D78",
+        "0x8BebaDf625b932811Bf71fBa961ed067b5770EfA"
+      ]
+    },
+    "parametricTriggers": {
+      "address": "0x037E960c64a5d37614a204fB6a27620Bc8076A4b",
+      "name": "ParametricTriggersImpl",
+      "args": [
+        "0x54A4c8006272fDeA157950421ceBeb510387af83",
+        "0x7438af9FC68fE976e33029E570720d19A975baC7",
+        "0x0000000000000000000000000000000000000000",
+        "0x8BebaDf625b932811Bf71fBa961ed067b5770EfA"
+      ]
+    }
+  }
+}

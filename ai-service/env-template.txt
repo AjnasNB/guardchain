@@ -1,0 +1,24 @@
+# AI Service Configuration
+API_KEY=guardchain_dev_key_2024
+LOG_LEVEL=INFO
+
+# Model Configuration
+OCR_MODEL_PATH=./models/ocr
+FRAUD_MODEL_PATH=./models/fraud
+IMAGE_MODEL_PATH=./models/image
+
+# External Services
+OPENAI_API_KEY=your_openai_api_key_here
+GOOGLE_CLOUD_API_KEY=your_google_cloud_api_key_here
+
+# Google Gemini Configuration
+GOOGLE_API_KEY=AIzaSyA9mhQYZe3WjYBlm2gPejBxtYANXkf4USc
+GEMINI_MODEL=gemini-2.5-flash
+
+# Database (if needed)
+DATABASE_URL=sqlite:///./ai_service.db
+
+# Logging
+LOG_FILE=./logs/ai_service.log
+ERROR_LOG_FILE=./logs/errors.log
+PERFORMANCE_LOG_FILE=./logs/performance.log 

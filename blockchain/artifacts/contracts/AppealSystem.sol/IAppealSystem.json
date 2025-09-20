@@ -1,0 +1,306 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IAppealSystem",
+  "sourceName": "contracts/AppealSystem.sol",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "claimId",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint16",
+          "name": "payoutBps",
+          "type": "uint16"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "approved",
+          "type": "bool"
+        }
+      ],
+      "name": "AppealConcluded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "claimId",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "appellant",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "reason",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "evidenceHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "AppealFiled",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "claimId",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "internalType": "address[]",
+          "name": "jurors",
+          "type": "address[]"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint64",
+          "name": "deadline",
+          "type": "uint64"
+        }
+      ],
+      "name": "AppealJurySelected",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "claimId",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        }
+      ],
+      "name": "canFileAppeal",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "canAppeal",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "claimId",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "string",
+          "name": "reason",
+          "type": "string"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "evidenceHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "fileAppeal",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "claimId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "getAppeal",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "bytes32",
+              "name": "claimId",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "address",
+              "name": "appellant",
+              "type": "address"
+            },
+            {
+              "internalType": "string",
+              "name": "reason",
+              "type": "string"
+            },
+            {
+              "internalType": "bytes32",
+              "name": "evidenceHash",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "uint256",
+              "name": "timestamp",
+              "type": "uint256"
+            },
+            {
+              "internalType": "bool",
+              "name": "processed",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct IAppealSystem.AppealRequest",
+          "name": "appeal",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "claimId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "getAppealJury",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address[]",
+              "name": "jurors",
+              "type": "address[]"
+            },
+            {
+              "internalType": "uint64",
+              "name": "deadline",
+              "type": "uint64"
+            },
+            {
+              "internalType": "uint8",
+              "name": "requiredVotes",
+              "type": "uint8"
+            },
+            {
+              "internalType": "bool",
+              "name": "concluded",
+              "type": "bool"
+            },
+            {
+              "internalType": "uint16",
+              "name": "payoutBps",
+              "type": "uint16"
+            }
+          ],
+          "internalType": "struct IAppealSystem.AppealJury",
+          "name": "jury",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "claimId",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "uint8",
+          "name": "count",
+          "type": "uint8"
+        }
+      ],
+      "name": "getReputationWeightedJurors",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "jurors",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "claimId",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "seed",
+          "type": "bytes32"
+        }
+      ],
+      "name": "selectAppealJury",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "claimId",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "uint16",
+          "name": "payoutBps",
+          "type": "uint16"
+        },
+        {
+          "internalType": "uint16",
+          "name": "confidenceBps",
+          "type": "uint16"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "rationaleHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "submitAppealVote",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

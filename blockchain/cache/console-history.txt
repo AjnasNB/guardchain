@@ -1,0 +1,6 @@
+Ctrl+C
+exit
+npm run compile
+npx hardhat compile
+node scripts/test-contract.js
+npx hardhat run scripts/test-contract.js --network arbitrumSepolia

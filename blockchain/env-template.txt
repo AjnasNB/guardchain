@@ -1,0 +1,27 @@
+# Private key for deploying contracts (without 0x prefix)
+PRIVATE_KEY=your_private_key_here
+
+# Arbiscan API key for contract verification
+ARBISCAN_API_KEY=your_arbiscan_api_key_here
+
+# Arbitrum Sepolia RPC
+ARBITRUM_SEPOLIA_RPC=https://sepolia-rollup.arbitrum.io/rpc
+
+# Chainlink oracle configurations
+CHAINLINK_VRF_COORDINATOR=0x84b9B910527Ad5C03A9Ca831909E21e236EA7b06
+CHAINLINK_KEY_HASH=0x114f3da0a805b6a67d6e9cd2ec746f7028f1b7376365af575cfea3550dd1aa04
+CHAINLINK_SUBSCRIPTION_ID=your_subscription_id
+
+# Initial token supply and economics
+INITIAL_STABLECOIN_SUPPLY=10000000000000000000000000
+INITIAL_GOVERNANCE_SUPPLY=1000000000000000000000000
+RESERVE_RATIO=80
+JURY_STAKE_AMOUNT=1000000000000000000000
+
+# Contract addresses after deployment (filled during deployment)
+STABLECOIN_ADDRESS=
+GOVERNANCE_TOKEN_ADDRESS=
+POLICY_NFT_ADDRESS=
+CLAIMS_ENGINE_ADDRESS=
+SURPLUS_DISTRIBUTOR_ADDRESS=
+GOVERNANCE_ADDRESS= 

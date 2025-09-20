@@ -1,0 +1,216 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_governanceToken",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_governance",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_admin",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "admin",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "config",
+    "outputs": [
+      {
+        "internalType": "uint16",
+        "name": "baseBps",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint16",
+        "name": "stakeLightBps",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint16",
+        "name": "stakeHeavyBps",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint16",
+        "name": "localitySameBps",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint16",
+        "name": "expertiseMatchBps",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint16",
+        "name": "wMaxBps",
+        "type": "uint16"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getConfig",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "baseBps",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "stakeLightBps",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "stakeHeavyBps",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "localitySameBps",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "expertiseMatchBps",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "wMaxBps",
+            "type": "uint16"
+          }
+        ],
+        "internalType": "struct IVoteTally.WeightsConfig",
+        "name": "cfg",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "governance",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "governanceToken",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint16[]",
+        "name": "payoutBps",
+        "type": "uint16[]"
+      },
+      {
+        "internalType": "uint16[]",
+        "name": "confidenceBps",
+        "type": "uint16[]"
+      },
+      {
+        "internalType": "uint16[]",
+        "name": "repBps",
+        "type": "uint16[]"
+      },
+      {
+        "internalType": "uint8[]",
+        "name": "stakeTier",
+        "type": "uint8[]"
+      },
+      {
+        "internalType": "bool[]",
+        "name": "isLocal",
+        "type": "bool[]"
+      },
+      {
+        "internalType": "bool[]",
+        "name": "hasExpertise",
+        "type": "bool[]"
+      },
+      {
+        "internalType": "uint16",
+        "name": "quorumRequired",
+        "type": "uint16"
+      }
+    ],
+    "name": "tally",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "payoutBps",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint8",
+            "name": "verdict",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint16",
+            "name": "quorum",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "required",
+            "type": "uint16"
+          }
+        ],
+        "internalType": "struct IVoteTally.Tallied",
+        "name": "result",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

@@ -1,0 +1,67 @@
+{
+  "network": {
+    "name": "bsc_testnet",
+    "chainId": "97"
+  },
+  "deployer": "0x8BebaDf625b932811Bf71fBa961ed067b5770EfA",
+  "timestamp": "2025-07-19T10:33:19.065Z",
+  "contracts": {
+    "stablecoin": {
+      "address": "0x644Ed1D005Eadbaa4D4e05484AEa8e52A4DB76c8",
+      "name": "ChainSureStablecoin",
+      "symbol": "csINR",
+      "args": [
+        "0x0000000000000000000000000000000000000000",
+        "12000000000000000"
+      ]
+    },
+    "governanceToken": {
+      "address": "0xD0aa884859B93aFF4324B909fAeC619096f0Cc05",
+      "name": "ChainSureGovernanceToken",
+      "symbol": "CSURE",
+      "args": [
+        "1000000000000000000000000"
+      ]
+    },
+    "policyNFT": {
+      "address": "0x2e2acdf394319b365Cc46cF587ab8a2d25Cb3312",
+      "name": "ChainSurePolicyNFT",
+      "symbol": "CSPOLICY",
+      "args": [
+        "0x644Ed1D005Eadbaa4D4e05484AEa8e52A4DB76c8",
+        "0x8BebaDf625b932811Bf71fBa961ed067b5770EfA"
+      ]
+    },
+    "claimsEngine": {
+      "address": "0x528Bf18723c2021420070e0bB2912F881a93ca53",
+      "name": "ChainSureClaimsEngine",
+      "args": [
+        "0x2e2acdf394319b365Cc46cF587ab8a2d25Cb3312",
+        "0xD0aa884859B93aFF4324B909fAeC619096f0Cc05",
+        "0x644Ed1D005Eadbaa4D4e05484AEa8e52A4DB76c8",
+        "0x0000000000000000000000000000000000000000"
+      ]
+    },
+    "surplusDistributor": {
+      "address": "0x95b0821Dc5C8d272Cc34C593faa76f62E7EAA2Ac",
+      "name": "ChainSureSurplusDistributor",
+      "args": [
+        "0x644Ed1D005Eadbaa4D4e05484AEa8e52A4DB76c8",
+        "0xD0aa884859B93aFF4324B909fAeC619096f0Cc05",
+        "0x2e2acdf394319b365Cc46cF587ab8a2d25Cb3312",
+        "0x0000000000000000000000000000000000000000"
+      ]
+    },
+    "governance": {
+      "address": "0x364424CBf264F54A0fFE12D99F3902B398fc0B36",
+      "name": "ChainSureGovernance",
+      "args": [
+        "0xD0aa884859B93aFF4324B909fAeC619096f0Cc05",
+        "0x2e2acdf394319b365Cc46cF587ab8a2d25Cb3312",
+        "0x528Bf18723c2021420070e0bB2912F881a93ca53",
+        "0x95b0821Dc5C8d272Cc34C593faa76f62E7EAA2Ac",
+        "0x8BebaDf625b932811Bf71fBa961ed067b5770EfA"
+      ]
+    }
+  }
+}

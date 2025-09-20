@@ -1,0 +1,85 @@
+# Application Configuration
+NODE_ENV=development
+PORT=3000
+FRONTEND_URL=http://localhost:3001
+
+# Database Configuration
+DATABASE_PATH=db/guardchain.db
+DATABASE_LOGGING=false
+
+# JWT Configuration
+JWT_SECRET=guardchain-secret-key-change-in-production
+JWT_EXPIRES_IN=24h
+JWT_REFRESH_SECRET=guardchain-refresh-secret-change-in-production
+JWT_REFRESH_EXPIRES_IN=7d
+
+# Blockchain Configuration
+BLOCKCHAIN_NETWORK=arbitrum_sepolia
+BLOCKCHAIN_CHAIN_ID=421614
+BLOCKCHAIN_RPC_URL=https://sepolia-rollup.arbitrum.io/rpc
+BLOCKCHAIN_PRIVATE_KEY=your_private_key_here
+BLOCKCHAIN_GAS_LIMIT=500000
+BLOCKCHAIN_GAS_PRICE=20000000000
+BLOCKCHAIN_CONFIRMATIONS=3
+BLOCKCHAIN_EXPLORER_URL=https://sepolia.arbiscan.io
+ARBISCAN_API_KEY=your_arbiscan_api_key
+
+# Smart Contract Addresses (filled after deployment)
+CONTRACT_STABLECOIN_ADDRESS=
+CONTRACT_GOVERNANCE_TOKEN_ADDRESS=
+CONTRACT_POLICY_NFT_ADDRESS=
+CONTRACT_CLAIMS_ENGINE_ADDRESS=
+CONTRACT_SURPLUS_DISTRIBUTOR_ADDRESS=
+CONTRACT_GOVERNANCE_ADDRESS=
+
+# AI Service Configuration
+AI_SERVICE_URL=http://localhost:8001
+AI_SERVICE_API_KEY=guardchain_dev_key_2024
+AI_SERVICE_TIMEOUT=30000
+AI_FRAUD_THRESHOLD=80
+AI_CONFIDENCE_THRESHOLD=70
+AI_ENABLE_FRAUD_DETECTION=true
+AI_ENABLE_DOCUMENT_ANALYSIS=true
+AI_ENABLE_IMAGE_ANALYSIS=true
+AI_MAX_FILE_SIZE=52428800
+AI_ALLOWED_FILE_TYPES=pdf,jpg,jpeg,png,bmp,tiff
+
+# Security Configuration
+BCRYPT_ROUNDS=12
+SESSION_SECRET=guardchain-session-secret-change-in-production
+WEBHOOK_SECRET=your_webhook_secret
+
+# Rate Limiting
+RATE_LIMIT_TTL=60000
+RATE_LIMIT_MAX=100
+
+# File Upload
+MAX_FILE_SIZE=52428800
+UPLOAD_PATH=uploads
+
+# Logging
+LOG_LEVEL=info
+LOG_FORMAT=json
+
+# Email Configuration
+EMAIL_FROM=noreply@guardchain.com
+EMAIL_PROVIDER=smtp
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your_email@gmail.com
+SMTP_PASS=your_app_password
+SMTP_SECURE=false
+
+# Feature Flags
+ENABLE_REGISTRATION=true
+ENABLE_EMAIL_VERIFICATION=true
+ENABLE_2FA=false
+ENABLE_ANALYTICS=true
+
+# Maintenance
+MAINTENANCE_MODE=false
+MAINTENANCE_MESSAGE=System is under maintenance. Please try again later.
+
+# External Services
+IPFS_GATEWAY=https://ipfs.io/ipfs
+ANALYTICS_PROVIDER=internal 

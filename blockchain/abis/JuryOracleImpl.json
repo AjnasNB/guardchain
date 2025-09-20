@@ -1,0 +1,388 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_governanceToken",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_claimsEngine",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_admin",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "claimId",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "address[]",
+        "name": "jurors",
+        "type": "address[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "seed",
+        "type": "bytes32"
+      }
+    ],
+    "name": "PanelSelected",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "claimId",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "juror",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "payoutBps",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint16",
+        "name": "confidenceBps",
+        "type": "uint16"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "rationaleHash",
+        "type": "bytes32"
+      }
+    ],
+    "name": "VoteCast",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "admin",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "claimsEngine",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "name": "deadlines",
+    "outputs": [
+      {
+        "internalType": "uint64",
+        "name": "",
+        "type": "uint64"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "claimId",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getPanel",
+    "outputs": [
+      {
+        "internalType": "address[]",
+        "name": "jurors",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint64",
+        "name": "deadline",
+        "type": "uint64"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "claimId",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "juror",
+        "type": "address"
+      }
+    ],
+    "name": "getVote",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "payoutBps",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "confidenceBps",
+            "type": "uint16"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "rationaleHash",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint8",
+            "name": "stakeTier",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "locality",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "expertise",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct IJuryOracle.VoteInput",
+        "name": "input",
+        "type": "tuple"
+      },
+      {
+        "internalType": "bool",
+        "name": "exists",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "governanceToken",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "panels",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "claimId",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "seed",
+        "type": "bytes32"
+      }
+    ],
+    "name": "selectPanel",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "claimId",
+        "type": "bytes32"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint16",
+            "name": "payoutBps",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint16",
+            "name": "confidenceBps",
+            "type": "uint16"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "rationaleHash",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint8",
+            "name": "stakeTier",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "locality",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "expertise",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct IJuryOracle.VoteInput",
+        "name": "input",
+        "type": "tuple"
+      }
+    ],
+    "name": "submitVote",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "name": "voteSubmitted",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "votes",
+    "outputs": [
+      {
+        "internalType": "uint16",
+        "name": "payoutBps",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint16",
+        "name": "confidenceBps",
+        "type": "uint16"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "rationaleHash",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint8",
+        "name": "stakeTier",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "locality",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "expertise",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
