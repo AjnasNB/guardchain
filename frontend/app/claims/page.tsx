@@ -410,11 +410,47 @@ export default function ClaimsPage() {
         console.log('Vote response received:', result);
         
         if (result.success) {
-          alert(`Vote recorded successfully! ${result.message}`);
-          closeVoteModal();
+          // Vote was recorded successfully in backend
+          console.log('Vote recorded in backend, now executing MetaMask transaction...');
           
-          // Reload claims to show updated vote counts
-          await loadClaims();
+          // Execute MetaMask transaction if available
+          if (result.transaction) {
+            try {
+              if (!(window as any).ethereum) {
+                alert('MetaMask is not installed');
+                return;
+              }
+
+              const tx = await (window as any).ethereum.request({
+                method: 'eth_sendTransaction',
+                params: [{
+                  from: account,
+                  to: result.transaction.to,
+                  data: result.transaction.data,
+                  value: result.transaction.value || '0x0',
+                  gas: result.transaction.estimatedGas || '150000',
+                }],
+              });
+
+              console.log('MetaMask transaction successful:', tx);
+              alert(`Vote recorded and blockchain transaction submitted! Hash: ${tx}`);
+              closeVoteModal();
+              
+              // Reload claims to show updated vote counts
+              await loadClaims();
+            } catch (txError) {
+              console.error('MetaMask transaction failed:', txError);
+              // Vote was already recorded in backend, so show success
+              alert(`Vote recorded successfully! MetaMask transaction failed: ${(txError as any).message || txError}`);
+              closeVoteModal();
+              await loadClaims();
+            }
+          } else {
+            // No transaction data, just show success
+            alert(`Vote recorded successfully! ${result.message}`);
+            closeVoteModal();
+            await loadClaims();
+          }
         } else {
           alert(`Vote failed: ${result.message}`);
         }
